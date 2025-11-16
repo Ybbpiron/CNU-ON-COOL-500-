@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>온앤쿨 - 충남대 공유 난방+배터리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #FF7A00;
+            --secondary-warm: #FF9933;
+            --dark-bg: #1A1410;
+            --card-bg: #2A2420;
+            --text-light: #FFF5E8;
+            --text-muted: #C4B5A0;
+            --accent-glow: rgba(255, 122, 0, 0.25);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 20, 16, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(255, 122, 0, 0.15);
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 122, 0, 0.15);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav li {
+            margin: 5px 15px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s;
+            padding: 5px 10px;
+        }
+
+        nav a:hover {
+            color: var(--primary-orange);
+            text-shadow: 0 0 10px rgba(255, 122, 0, 0.6);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 120px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #1A1410 0%, #2A2420 50%, #1A1410 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            font-weight: 900;
+            margin-bottom: 30px;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-warm) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3em;
+            color: var(--text-muted);
+            margin-bottom: 50px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-warm) 100%);
+            color: white;
+            padding: 20px 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px var(--accent-glow);
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 30px rgba(255, 122, 0, 0.5);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: var(--primary-orange);
+            border: 2px solid var(--primary-orange);
+            box-shadow: none;
+            margin-left: 15px;
+        }
+
+        .cta-button.secondary:hover {
+            background: rgba(255, 122, 0, 0.15);
+        }
+
+        .cta-button.orange {
+            background: linear-gradient(135deg, #FF5500 0%, var(--primary-orange) 100%);
+            color: white;
+        }
+
+        .cta-button.orange:hover {
+            box-shadow: 0 6px 30px rgba(255, 85, 0, 0.5);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 100px 0;
+        }
+
+        section:nth-child(even) {
+            background: var(--card-bg);
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--text-light) 0%, var(--primary-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.2em;
+            color: var(--text-muted);
+            text-align: center;
+            margin-bottom: 60px;
+            line-height: 1.7;
+        }
+
+        /* Problem Section */
+        .problem-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .problem-item {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 122, 0, 0.15);
+            transition: all 0.3s;
+        }
+
+        .problem-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-orange);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .problem-item .icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .problem-item h3 {
+            font-size: 1.4em;
+            color: var(--primary-orange);
+            margin-bottom: 15px;
+        }
+
+        .problem-item p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .blockquote {
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.25) 0%, rgba(255, 153, 51, 0.15) 100%);
+            color: var(--text-light);
+            padding: 40px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-orange);
+            font-size: 1.3em;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 50px;
+            line-height: 1.7;
+        }
+
+        /* Solution Section */
+        .solution-content {
+            background: var(--dark-bg);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 122, 0, 0.25);
+            box-shadow: 0 5px 30px var(--accent-glow);
+            margin-top: 50px;
+        }
+
+        .solution-list {
+            margin-top: 40px;
+        }
+
+        .solution-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            border-left: 5px solid var(--primary-orange);
+            transition: all 0.3s;
+        }
+
+        .solution-item:hover {
+            border-left-width: 8px;
+            transform: translateX(5px);
+        }
+
+        .solution-item .icon {
+            font-size: 2.5em;
+            margin-right: 20px;
+        }
+
+        .solution-item h3 {
+            font-size: 1.3em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .solution-item p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 50px 35px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 122, 0, 0.15);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 50%);
+            transition: all 0.5s;
+        }
+
+        .feature-card:hover::before {
+            top: -50%;
+            left: -50%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-orange);
+            box-shadow: 0 10px 35px var(--accent-glow);
+        }
+
+        .feature-card .number {
+            font-size: 4em;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-warm) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0.3;
+            margin-bottom: -20px;
+        }
+
+        .feature-card .icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card h3 {
+            font-size: 1.4em;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Trust Section */
+        .trust-content {
+            margin-top: 50px;
+        }
+
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .trust-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 122, 0, 0.15);
+            transition: all 0.3s;
+        }
+
+        .trust-card:hover {
+            border-color: var(--primary-orange);
+            box-shadow: 0 5px 20px var(--accent-glow);
+        }
+
+        .trust-card .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-warm) 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .trust-card h3 {
+            font-size: 1.3em;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .trust-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        /* Pricing Section */
+        .pricing-table {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 122, 0, 0.25);
+            margin-top: 50px;
+        }
+
+        .pricing-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .pricing-table th,
+        .pricing-table td {
+            padding: 25px 30px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .pricing-table th {
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.25) 0%, rgba(255, 153, 51, 0.15) 100%);
+            color: var(--text-light);
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        .pricing-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .pricing-table .highlight-col {
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.2) 0%, rgba(255, 153, 51, 0.1) 100%);
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+
+        .pricing-alert {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-warm) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        /* Closing Section */
+        .closing {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 122, 0, 0.15) 0%, rgba(255, 153, 51, 0.08) 100%);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .closing::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1000px;
+            height: 1000px;
+            background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .closing h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .closing p {
+            font-size: 1.3em;
+            margin-bottom: 50px;
+            line-height: 1.7;
+            color: var(--text-muted);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 30px 0;
+            font-size: 0.9em;
+        }
+
+        footer a {
+            color: var(--primary-orange);
+            text-decoration: none;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.85);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            margin: auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(255, 122, 0, 0.35);
+            animation: slideUp 0.3s;
+            border: 1px solid rgba(255, 122, 0, 0.25);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px); 
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0); 
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-warm) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+
+        .modal-header.orange {
+            background: linear-gradient(135deg, #FF5500 0%, var(--primary-orange) 100%);
+            color: white;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.8em;
+            font-weight: 900;
+        }
+
+        .modal-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.95;
+        }
+
+        .close-button {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: inherit;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            line-height: 1;
+            transition: transform 0.2s;
+        }
+
+        .close-button:hover {
+            transform: scale(1.2);
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--text-light);
+            font-size: 0.95em;
+        }
+
+        .form-group label .required {
+            color: var(--primary-orange);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 1em;
+            font-family: 'Pretendard', sans-serif;
+            transition: all 0.3s;
+            background: var(--dark-bg);
+            color: var(--text-light);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-warm) 100%);
+            color: white;
+            padding: 18px;
+            font-size: 1.1em;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px var(--accent-glow);
+        }
+
+        .submit-button.orange {
+            background: linear-gradient(135deg, #FF5500 0%, var(--primary-orange) 100%);
+            color: white;
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .form-notice {
+            background: rgba(255, 122, 0, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            border-left: 3px solid var(--primary-orange);
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .success-message .icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .success-message h3 {
+            font-size: 1.8em;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .success-message p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1em;
+            }
+
+            nav ul {
+                font-size: 0.9em;
+            }
+
+            nav li {
+                margin: 5px 8px;
+            }
+
+            .section-title {
+                font-size: 1.8em;
+            }
+
+            .cta-button {
+                display: block;
+                margin: 10px 20px;
+            }
+
+            .cta-button.secondary {
+                margin-left: 20px;
+            }
+
+            .problem-list,
+            .features-grid,
+            .trust-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-table {
+                overflow-x: auto;
+            }
+
+            .pricing-table th,
+            .pricing-table td {
+                padding: 15px;
+                font-size: 0.9em;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+
+            .modal-header,
+            .modal-body {
+                padding: 25px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .hero .icon {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#rental">대여</a></li>
+            <li><a href="#pricing">가격</a></li>
+            <li><a href="#about">소개</a></li>
+            <li><a href="#howto">이용방법</a></li>
+            <li><a href="#contact">문의</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="icon" style="font-size: 5em; margin-bottom: 30px;">💨❄️🔥</div>
+            <h1 class="fade-in">
+                계절마다 버려지는 일회용품 대신,<br>
+                <span class="highlight">'온앤쿨'</span> 하세요
+            </h1>
+            <p class="subtitle fade-in">
+                스마트하게 빌려쓰는 충남대 공유 난방+배터리<br>
+                <strong>언제 어디서나, QR 하나로 시원하게 · 따뜻하게</strong>
+            </p>
+            <a href="https://docs.google.com/forms/d/1Hl8jXrtWqL-0ZVkp720rmEINSVOach913jufNFQnGFc/viewform" target="_blank" class="cta-button fade-in">온앤쿨 예약하기</a>
+        </div>
+    </section>
+
+    <!-- Rental Section -->
+    <section id="rental">
+        <div class="container">
+            <h2 class="section-title">온앤쿨 대여 서비스</h2>
+            <p class="section-subtitle">여름에는 손풍기, 겨울에는 손난로<br>매번 사서 방치하고 버리셨나요?</p>
+            
+            <div class="problem-list">
+                <div class="problem-item">
+                    <div class="icon">💸</div>
+                    <h3>매년 반복되는 지출</h3>
+                    <p>갑자기 필요할 때마다 구매하는 손난로, 일회용 손풍기는 비용 낭비. 쓰다가 결국 서랍 속에서 잊혀집니다.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="icon">🔋</div>
+                    <h3>배터리 불안감</h3>
+                    <p>기껏 챙겼는데, 급할 때 꺼지는 배터리. 충전기 찾느라 허비하는 시간이 아깝습니다.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="icon">🌍</div>
+                    <h3>환경적 부담</h3>
+                    <p>일회용 제품의 대량 폐기물 발생. 편리함과 환경 보호 사이의 딜레마에서 벗어나지 못합니다.</p>
+                </div>
+            </div>
+
+            <div class="blockquote">
+                당신의 필요에 맞춰 '딱 그때만'<br>
+                스마트하게 대여하고 반납하세요 ⚡
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title">온앤쿨 서비스 소개</h2>
+            <p class="section-subtitle">
+                '온앤쿨'은 계절의 온도와 당신의 라이프를 스마트하게 연결합니다<br>
+                복잡함 없이, 환경에 죄책감 없이, 주머니 부담 없이<br>
+                개인의 온도를 완벽하게 책임지는 <strong>최첨단 공유 솔루션</strong>
+            </p>
+
+            <div class="blockquote" style="margin-top: 30px; margin-bottom: 40px;">
+                <strong>유니템프 동아리</strong>는 여름에는 손풍기, 겨울에는 손난로, 보조배터리 기능이 다 되는 온앤쿨을 공유하는 서비스를 목표로 합니다.<br>
+                <br>
+                현재 <strong>시범사업</strong>으로 겨울에 손난로와 보조배터리 기능이 되는 제품을 우선적으로 공유하여<br>
+                온앤쿨의 수요를 파악하려고 합니다. 🔥
+            </div>
+
+            <div class="solution-content">
+                <div class="solution-list">
+                    <div class="solution-item">
+                        <div class="icon">📱</div>
+                        <div>
+                            <h3>QR 기반 1초 대여</h3>
+                            <p>대여소 QR 코드 스캔, 간편 결제로 24시간 즉시 이용. 앱 설치 후 3번의 터치면 끝!</p>
+                        </div>
+                    </div>
+                    <div class="solution-item">
+                        <div class="icon">📍</div>
+                        <div>
+                            <h3>대여 장소: 인재개발원 3층</h3>
+                            <p><strong>인재개발원 3층 정수기 옆</strong>에서 온앤쿨을 대여하실 수 있습니다. 편리한 위치에서 간편하게 이용해보세요!</p>
+                        </div>
+                    </div>
+                    <div class="solution-item">
+                        <div class="icon">🌡️</div>
+                        <div>
+                            <h3>온도 맞춤형 제어 + 보조배터리</h3>
+                            <p>손난로로 따뜻하게, 보조배터리로 스마트폰 충전까지! 겨울철 필수 아이템을 하나로 해결하세요.</p>
+                        </div>
+                    </div>
+                    <div class="solution-item">
+                        <div class="icon">♻️</div>
+                        <div>
+                            <h3>에코프렌들리 라이프</h3>
+                            <p>기기 수명을 극대화하는 공유 시스템으로, 불필요한 자원 낭비를 원천 차단. 지구를 위한 선택입니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Use Section -->
+    <section id="howto">
+        <div class="container">
+            <h2 class="section-title">온앤쿨 이용방법</h2>
+            <p class="section-subtitle">3가지 간편한 스텝으로 시작하세요</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="number">01</div>
+                    <div class="icon">📱</div>
+                    <h3>QR 접속 후<br>구글 폼 작성</h3>
+                    <p>인재개발원 3층 정수기 옆에 비치된 QR 코드를 스캔하여 예약 시간을 구글 폼에 작성해주세요.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="number">02</div>
+                    <div class="icon">💳</div>
+                    <h3>해당 금액 입금 후<br>비밀번호 수령</h3>
+                    <p>이용 시간에 맞는 금액을 입금하시면, 동아리원이 확인 후 자물쇠 비밀번호를 개인적으로 알려드립니다.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="number">03</div>
+                    <div class="icon">⏰</div>
+                    <h3>대여 시간 내<br>반납 완료</h3>
+                    <p>예약하신 시간 내에 온앤쿨을 반납해주세요.<br><br><strong style="color: var(--primary-orange);">⚠️ 주의사항</strong><br>시간 내 반납을 안 할 시 추가비용이 발생합니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section id="trust">
+        <div class="container">
+            <h2 class="section-title">믿을 수 있는 온앤쿨</h2>
+            <p class="section-subtitle">
+                검증된 기술력과 청년 창업의 혁신<br>
+                초기 검증 단계를 거치며<br>
+                <strong>사용자 경험(UX)을 최우선</strong>으로 설계되었습니다
+            </p>
+
+            <div class="trust-grid">
+                <div class="trust-card">
+                    <span class="badge">MVP 개발 현황</span>
+                    <h3>동아리원 직접 개발</h3>
+                    <p>유니템프 동아리원들이 직접 웹사이트를 기획하고 개발했습니다. 사용자 편의를 최우선으로 생각하며 지속적으로 개선해나가고 있습니다.</p>
+                </div>
+                <div class="trust-card">
+                    <span class="badge">제품 개발 중</span>
+                    <h3>냉방 + 온열 + 보조배터리 일체형</h3>
+                    <p>현재 개발 담당 동아리원이 냉방 + 온열 + 보조배터리 기능을 가진 혁신적인 제품을 개발 중입니다. 많은 기대 부탁드립니다! 🚀</p>
+                </div>
+                <div class="trust-card">
+                    <span class="badge">고객 지원</span>
+                    <h3>오픈카카오톡 상시 운영</h3>
+                    <p>오픈카카오톡을 상시 운영 중이므로 문의사항이나 문제 발생 시 편하게 문의해주시면 신속하게 답변드리겠습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing">
+        <div class="container">
+            <h2 class="section-title">이용 가격</h2>
+            <p class="section-subtitle">
+                🔥 시범사업 특별 가격 안내<br>
+                <strong>이용시간: 오전 9시 ~ 오후 6시</strong>
+            </p>
+
+            <div class="pricing-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>이용 시간</th>
+                            <th>이용 금액</th>
+                            <th>시간당 평균</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1시간</strong></td>
+                            <td class="highlight-col">500원</td>
+                            <td>500원/시간</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2시간</strong></td>
+                            <td class="highlight-col">800원</td>
+                            <td>400원/시간</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3시간</strong></td>
+                            <td class="highlight-col">1,000원</td>
+                            <td>333원/시간</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4시간</strong></td>
+                            <td class="highlight-col">1,200원</td>
+                            <td>300원/시간</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5시간</strong></td>
+                            <td class="highlight-col">1,400원</td>
+                            <td>280원/시간</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6시간</strong></td>
+                            <td class="highlight-col">1,600원</td>
+                            <td>267원/시간</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7시간</strong></td>
+                            <td class="highlight-col">1,800원</td>
+                            <td>257원/시간</td>
+                        </tr>
+                        <tr>
+                            <td><strong>일일 이용 (9시간)</strong></td>
+                            <td class="highlight-col" style="font-size: 1.2em;">2,000원</td>
+                            <td><strong>222원/시간 (최저가!)</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pricing-alert">
+                ⚡ 오래 사용할수록 더 저렴해집니다!<br>
+                일일 이용권으로 하루 종일 따뜻하게 보내세요 🔥
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact/CTA Section -->
+    <section id="contact" class="closing">
+        <div class="container">
+            <h2>지금 바로 문의하고 시작하세요!</h2>
+            <p>
+                계절을 앞서가는 당신의 선택이 환경을 바꿉니다.<br>
+                궁금한 점이 있으시면 오픈채팅방으로 편하게 문의해주세요!
+            </p>
+            <a href="https://docs.google.com/forms/d/1Hl8jXrtWqL-0ZVkp720rmEINSVOach913jufNFQnGFc/viewform" target="_blank" class="cta-button" style="margin-bottom: 20px;">
+                온앤쿨 예약하기
+            </a>
+            <br>
+            <a href="https://open.kakao.com/o/gHy1Wu1h" target="_blank" class="cta-button orange">오픈채팅방에서 문의하기</a>
+        </div>
+    </section>
+
+    <!-- Beta Tester Application Modal -->
+    <div id="betaModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-button" onclick="closeModal('betaModal')">&times;</button>
+                <h2>🎉 베타 테스터 신청하기</h2>
+                <p>첫 대여 2시간 무료! 특별 혜택을 받으실 수 있습니다</p>
+            </div>
+            <div class="modal-body" style="padding: 0;">
+                <iframe 
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSdYbbZQz7rPQGgBOJWxDu79Z_4dYNFySVOach913jufNFQnGFc/viewform?embedded=true" 
+                    width="100%" 
+                    height="600" 
+                    frameborder="0" 
+                    marginheight="0" 
+                    marginwidth="0"
+                    style="border-radius: 0 0 20px 20px;">
+                    로딩중...
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spot Installation Request Modal -->
+    <div id="spotModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header orange">
+                <button class="close-button" onclick="closeModal('spotModal')">&times;</button>
+                <h2>📍 온앤쿨 스팟 설치 요청</h2>
+                <p>우리 학교/지역에 대여소를 설치해드립니다</p>
+            </div>
+            <div class="modal-body">
+                <form id="spotForm">
+                    <div class="form-notice">
+                        💡 <strong>신청 후 검토를 거쳐 설치 일정을 안내드립니다.</strong> 학교/기관의 경우 우선 설치됩니다.
+                    </div>
+
+                    <div class="form-group">
+                        <label>요청 유형 <span class="required">*</span></label>
+                        <select name="requestType" required>
+                            <option value="">선택해주세요</option>
+                            <option value="대학교">대학교</option>
+                            <option value="고등학교">고등학교</option>
+                            <option value="기업/직장">기업/직장</option>
+                            <option value="상업시설">상업시설 (카페, 편의점 등)</option>
+                            <option value="공공기관">공공기관</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>학교/기관명 <span class="required">*</span></label>
+                        <input type="text" name="institutionName" placeholder="예: 충남대학교" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>담당자명 <span class="required">*</span></label>
+                            <input type="text" name="contactName" placeholder="홍길동" required>
+                        </div>
+                        <div class="form-group">
+                            <label>연락처 <span class="required">*</span></label>
+                            <input type="tel" name="phone" placeholder="010-1234-5678" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>이메일 <span class="required">*</span></label>
+                        <input type="email" name="email" placeholder="example@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>설치 희망 주소 <span class="required">*</span></label>
+                        <input type="text" name="address" placeholder="대전광역시 유성구 대학로 99" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>설치 희망 위치 상세</label>
+                        <input type="text" name="detailLocation" placeholder="예: 중앙도서관 1층 로비, 학생회관 입구 등">
+                    </div>
+
+                    <div class="form-group">
+                        <label>예상 이용 인원 (1일 기준)</label>
+                        <select name="expectedUsers">
+                            <option value="">선택해주세요 (선택사항)</option>
+                            <option value="50명 미만">50명 미만</option>
+                            <option value="50~100명">50~100명</option>
+                            <option value="100~300명">100~300명</option>
+                            <option value="300명 이상">300명 이상</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>추가 요청사항 또는 설치 제안 이유</label>
+                        <textarea name="message" placeholder="스팟 설치가 필요한 이유나 추가 요청사항을 자유롭게 작성해주세요 (선택사항)"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-button orange">
+                        📍 스팟 설치 요청 완료하기
+                    </button>
+                </form>
+
+                <div class="success-message" id="spotSuccess">
+                    <div class="icon">✅</div>
+                    <h3>설치 요청이 완료되었습니다!</h3>
+                    <p>
+                        소중한 신청 감사합니다.<br>
+                        검토 후 영업일 기준 3일 이내에 연락드리겠습니다.<br>
+                        <br>
+                        <strong>온앤쿨</strong>과 함께<br>
+                        더 많은 사람들이 편리한 온도 조절을 경험할 수 있습니다! 🎉
+                    </p>
+                    <button class="submit-button orange" onclick="closeModal('spotModal')">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2025 온앤쿨 (On&Cool). All rights reserved.</p>
+            <p>충남대학교 창업동아리 프로젝트 | <a href="#">개인정보처리방침</a> | <a href="#">이용약관</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+            
+            // Reset spot form and success message if it's the spot modal
+            if (modalId === 'spotModal') {
+                const form = document.getElementById('spotForm');
+                const success = document.getElementById('spotSuccess');
+                
+                if (form && success) {
+                    form.style.display = 'block';
+                    success.classList.remove('active');
+                    form.reset();
+                }
+            }
+            
+            // For beta modal, reload iframe to reset Google Form
+            if (modalId === 'betaModal') {
+                const iframe = document.querySelector('#betaModal iframe');
+                if (iframe) {
+                    iframe.src = iframe.src;
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Spot Form Submission
+        document.getElementById('spotForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            console.log('스팟 설치 요청 데이터:', data);
+
+            // Show success message
+            document.getElementById('spotForm').style.display = 'none';
+            document.getElementById('spotSuccess').classList.add('active');
+        });
+
+        // Update CTA buttons to open modals or external links
+        document.querySelectorAll('a[href="#beta"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                openModal('betaModal');
+            });
+        });
+
+        document.querySelectorAll('a[href="#spot"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                openModal('spotModal');
+            });
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Don't prevent default for modal triggers
+                if (this.getAttribute('href') === '#beta' || 
+                    this.getAttribute('href') === '#spot') {
+                    return;
+                }
+                
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.problem-item, .solution-item, .feature-card, .trust-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
